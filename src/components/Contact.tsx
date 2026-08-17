@@ -44,12 +44,6 @@ export default function Contact() {
     outline: 'none', transition: 'border-color var(--transition)',
   }
 
-  const labelStyle: React.CSSProperties = {
-    display: 'block', fontSize: '0.72rem', fontWeight: 700,
-    letterSpacing: '0.1em', textTransform: 'uppercase',
-    color: 'var(--green)', marginBottom: '0.4rem',
-  }
-
   return (
     <section id="contact" className="section" style={{ background: 'var(--cream)' }}>
       <div className="container" style={{
