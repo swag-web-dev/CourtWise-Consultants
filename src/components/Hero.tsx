@@ -51,7 +51,7 @@ export default function Hero() {
           </div>
 
           {/* H1 */}
-          <h1 style={{
+          <h1 className="hero-h1" style={{
             fontFamily: 'var(--serif)',
             fontSize: 'clamp(2.8rem, 4.5vw, 5rem)',
             fontWeight: 700,
@@ -73,7 +73,7 @@ export default function Hero() {
             fontSize: 'clamp(1rem, 1.5vw, 1.25rem)',
             color: 'rgba(255,255,255,0.72)',
             letterSpacing: '0.01em',
-            marginBottom: '1rem',
+            marginBottom: '2rem',
           }}>
             Putting children at the heart of every decision.
           </p>
@@ -89,8 +89,7 @@ export default function Hero() {
             maxWidth: 500,
             marginBottom: '0.75rem',
           }}>
-            We provide expert support for families navigating the family justice system.
-            We don't just support your case — we explain every step of the journey.
+            We provide expert support for families<br className="tablet-br" /> navigating the family justice system.<br className="tablet-br" /> We don't just support<br className="tablet-br" /> your case — we explain every step of the journey.
           </p>
           <p style={{
             fontFamily: 'var(--serif)', fontStyle: 'italic',
@@ -183,36 +182,130 @@ export default function Hero() {
 
 
       <style>{`
-        /* Tablet (601–900px): text left, small contained photo box right */
-        @media (max-width: 900px) and (min-width: 601px) {
-          .hero-grid { grid-template-columns: 1fr 180px !important; align-items: start !important; }
+        /* ── iPad / Tablet (601–1180px): desktop-style overlay layout ── */
+        @media (max-width: 1400px) and (min-width: 601px) {
+
+          /* ┌──────────────────────────────────────────────────┐
+             │  TABLET IMAGE SIZE — change this one value        │
+             │  Controls image width as % of the viewport        │
+             │  80% = default, both people visible               │
+             │  100% = full viewport width                       │
+             └──────────────────────────────────────────────────┘ */
+          :root { --t-img-scale: 80%; }
+
+          /* Single text column; photo is absolutely overlaid on the right */
+          .hero-grid {
+            grid-template-columns: 1fr !important;
+            position: relative !important;
+          }
+
+          /* Text column — z-index above the image, right padding keeps text clear */
           .hero-grid > div:first-child {
-            padding: calc(var(--topbar-h) + var(--nav-h) + 2rem) 1rem 2rem 2rem !important;
+            position: relative !important;
+            z-index: 20 !important;
+            justify-content: flex-start !important;
+            padding-top:    calc(var(--topbar-h) + var(--nav-h) + 2rem) !important;
+            padding-right:  2rem !important;
+            padding-bottom: 2.5rem !important;
+            padding-left:   clamp(1.5rem, 4vw, 3.5rem) !important;
           }
-          /* Photo column: small fixed box, not full height */
+
+          /* Photo column — absolute, full height, right-anchored */
           .hero-photo-col {
-            width: 180px !important;
-            height: 220px !important;
-            margin-top: calc(var(--topbar-h) + var(--nav-h) + 2rem) !important;
-            margin-right: 1.5rem !important;
-            border-radius: 6px !important;
-            overflow: hidden !important;
-            flex-shrink: 0 !important;
-          }
-          .hero-team-img {
             position: absolute !important;
-            inset: 0 !important;
+            top: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
             width: 100% !important;
             height: 100% !important;
-            object-fit: cover !important;
-            object-position: center 15% !important;
-            transform: none !important;
-            left: 0 !important;
-            max-width: 100% !important;
+            z-index: 10 !important;
+            overflow: hidden !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
           }
-          /* Hide gradient overlays inside the small box */
-          .hero-photo-col > div[aria-hidden] { display: none !important; }
+
+          .hero-team-img {
+            position: absolute !important;
+            top: calc(var(--topbar-h) + var(--nav-h)) !important;
+            bottom: auto !important;
+            right: -15% !important;
+            left: auto !important;
+            transform: none !important;
+            width: var(--t-img-scale) !important;
+            height: auto !important;
+            max-width: none !important;
+          }
+
+          /* Restore gradient overlays */
+          .hero-photo-col > div[aria-hidden] { display: block !important; }
+
+          /* Top + left green fades */
+          .hero-photo-col::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+              linear-gradient(to bottom, rgba(6,62,45,0.85) 0%, transparent 28%),
+              linear-gradient(to right,  rgba(6,62,45,0.65) 0%, transparent 18%);
+            z-index: 16;
+            pointer-events: none;
+          }
+
+          /* Reduce empty green below content */
+          #home { min-height: auto !important; }
+
+          /* Bottom green gradient — covers empty space below image and fades into it */
+          .hero-photo-col::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 45%;
+            background: linear-gradient(to top, #063E2D 0%, #063E2D 55%, rgba(6,62,45,0.6) 75%, rgba(6,62,45,0) 100%);
+            z-index: 15;
+            pointer-events: none;
+          }
         }
+
+        /* iPad mini portrait (744×1133) — stronger gradient */
+        @media (min-width: 740px) and (max-width: 750px) {
+          .hero-photo-col::after {
+            background: linear-gradient(to top, #063E2D 0%, #063E2D 65%, rgba(6,62,45,0.75) 85%, rgba(6,62,45,0) 100%) !important;
+          }
+        }
+
+        /* Galaxy Tab S9 / S9+ range (~820–870px) — stronger gradient */
+        @media (min-width: 818px) and (max-width: 872px) {
+          .hero-photo-col::after {
+            background: linear-gradient(to top, #063E2D 0%, #063E2D 65%, rgba(6,62,45,0.75) 85%, rgba(6,62,45,0) 100%) !important;
+          }
+        }
+
+        /* Galaxy Tab S9 Ultra (~1028–1070px) — stronger gradient */
+        @media (min-width: 1028px) and (max-width: 1070px) {
+          .hero-photo-col::after {
+            background: linear-gradient(to top, #063E2D 0%, #063E2D 65%, rgba(6,62,45,0.75) 85%, rgba(6,62,45,0) 100%) !important;
+          }
+        }
+
+        /* iPad Pro 12.9" portrait (1024×1366) — softer + shorter gradient */
+        @media (min-width: 1020px) and (max-width: 1030px) and (min-height: 1350px) {
+          .hero-photo-col::after {
+            height: 28% !important;
+            background: linear-gradient(to top, #063E2D 0%, #063E2D 40%, rgba(6,62,45,0.35) 65%, rgba(6,62,45,0) 100%) !important;
+          }
+        }
+
+        .tablet-br { display: none; }
+
+        /* Tablet/iPad H1 scaling + line breaks + section height */
+        @media (max-width: 1400px) and (min-width: 601px) {
+          .hero-h1 { font-size: clamp(2.4rem, 4vw, 3.6rem) !important; }
+          .tablet-br { display: block; }
+          #home { padding-bottom: 3rem !important; }
+        }
+
         /* Phone: single column */
         @media (max-width: 600px) {
           .hero-grid { grid-template-columns: 1fr !important; }
