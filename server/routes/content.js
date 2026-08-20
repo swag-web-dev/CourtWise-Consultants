@@ -5,7 +5,7 @@ const requireAuth = require('../middleware/auth')
 // GET /api/content  — public, returns all key/value pairs as an object
 router.get('/', async (_req, res) => {
   try {
-    const [rows] = await db.query('SELECT content_key, value FROM content')
+    const { rows } = await db.query('SELECT content_key, value FROM content')
     const map = {}
     rows.forEach(r => { map[r.content_key] = r.value })
     res.json(map)
@@ -18,7 +18,7 @@ router.get('/', async (_req, res) => {
 // GET /api/content/meta  — admin only, returns full rows with label/type info
 router.get('/meta', requireAuth, async (_req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM content ORDER BY content_key')
+    const { rows } = await db.query('SELECT * FROM content ORDER BY content_key')
     res.json(rows)
   } catch (err) {
     console.error(err)
@@ -34,8 +34,8 @@ router.put('/:key(*)', requireAuth, async (req, res) => {
 
   try {
     await db.query(
-      `INSERT INTO content (content_key, value) VALUES (?, ?)
-       ON DUPLICATE KEY UPDATE value = VALUES(value), updated_at = NOW()`,
+      `INSERT INTO content (content_key, value) VALUES ($1, $2)
+       ON CONFLICT (content_key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
       [key, value]
     )
     res.json({ ok: true })
@@ -52,11 +52,13 @@ router.put('/bulk', requireAuth, async (req, res) => {
     return res.status(400).json({ error: 'Array of {key,value} required' })
   }
   try {
-    const values = entries.map(e => [e.key, e.value])
+    const keys   = entries.map(e => e.key)
+    const values = entries.map(e => e.value)
     await db.query(
-      `INSERT INTO content (content_key, value) VALUES ?
-       ON DUPLICATE KEY UPDATE value = VALUES(value), updated_at = NOW()`,
-      [values]
+      `INSERT INTO content (content_key, value)
+       SELECT unnest($1::text[]), unnest($2::text[])
+       ON CONFLICT (content_key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+      [keys, values]
     )
     res.json({ ok: true, saved: entries.length })
   } catch (err) {
