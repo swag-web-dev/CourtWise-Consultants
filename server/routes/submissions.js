@@ -2,19 +2,6 @@ const router      = require('express').Router()
 const db          = require('../db')
 const requireAuth = require('../middleware/auth')
 
-db.query(`
-  CREATE TABLE IF NOT EXISTS contact_submissions (
-    id         SERIAL PRIMARY KEY,
-    name       VARCHAR(255) NOT NULL,
-    email      VARCHAR(255),
-    phone      VARCHAR(50)  NOT NULL,
-    service    VARCHAR(255),
-    message    TEXT         NOT NULL,
-    is_read    SMALLINT     NOT NULL DEFAULT 0,
-    created_at TIMESTAMP    NOT NULL DEFAULT NOW()
-  )
-`).catch(err => console.error('submissions table init:', err))
-
 // GET all — includes tags array per submission
 router.get('/', requireAuth, async (_req, res) => {
   try {

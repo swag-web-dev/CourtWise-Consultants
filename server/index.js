@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors    = require('cors')
 const path    = require('path')
+const initDb  = require('./db-init')
 
 const app = express()
 
@@ -23,4 +24,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT, () => console.log(`CourtWise API running on port ${PORT}`))
+
+initDb()
+  .then(() => app.listen(PORT, () => console.log(`CourtWise API running on port ${PORT}`)))
+  .catch(err => { console.error('Database init failed:', err); process.exit(1) })

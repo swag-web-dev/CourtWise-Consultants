@@ -2,32 +2,6 @@ const router      = require('express').Router()
 const db          = require('../db')
 const requireAuth = require('../middleware/auth')
 
-// Auto-create tables
-db.query(`
-  CREATE TABLE IF NOT EXISTS cms_tags (
-    id         SERIAL PRIMARY KEY,
-    name       VARCHAR(100) NOT NULL,
-    color      VARCHAR(7)   NOT NULL DEFAULT '#C78A35',
-    hidden     SMALLINT     NOT NULL DEFAULT 0,
-    deleted    SMALLINT     NOT NULL DEFAULT 0,
-    created_at TIMESTAMP    NOT NULL DEFAULT NOW()
-  )
-`).catch(err => console.error('cms_tags init:', err))
-
-// Add columns if table already existed without them
-db.query(`ALTER TABLE cms_tags ADD COLUMN IF NOT EXISTS hidden  SMALLINT NOT NULL DEFAULT 0`).catch(() => {})
-db.query(`ALTER TABLE cms_tags ADD COLUMN IF NOT EXISTS deleted SMALLINT NOT NULL DEFAULT 0`).catch(() => {})
-
-db.query(`
-  CREATE TABLE IF NOT EXISTS submission_tags (
-    submission_id INT NOT NULL,
-    tag_id        INT NOT NULL,
-    PRIMARY KEY (submission_id, tag_id),
-    FOREIGN KEY (submission_id) REFERENCES contact_submissions(id) ON DELETE CASCADE,
-    FOREIGN KEY (tag_id)        REFERENCES cms_tags(id)            ON DELETE CASCADE
-  )
-`).catch(err => console.error('submission_tags init:', err))
-
 // GET all non-deleted tags
 router.get('/', requireAuth, async (_req, res) => {
   try {
