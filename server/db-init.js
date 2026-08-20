@@ -59,9 +59,9 @@ module.exports = async function initDb() {
 
   await db.query(`
     INSERT INTO admin_users (email, password_hash, name) VALUES (
-      'admin@courtwiseconsultants.co.uk',
-      '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.',
-      'Admin'
+      'CourtWise',
+      '$2a$10$UacPsxFuuBvf41G8zXEdueZdTC/vA2vGLlpD6SXIC0lCXCrbyp/am',
+      'CourtWise'
     ) ON CONFLICT (email) DO NOTHING
   `)
 

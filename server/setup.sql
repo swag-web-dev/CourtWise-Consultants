@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS admin_users (
 -- ── Default admin account  (password: Admin1234!)  ───────────────────────────
 -- IMPORTANT: Change this password immediately after first login.
 INSERT INTO admin_users (email, password_hash, name) VALUES (
-  'admin@courtwiseconsultants.co.uk',
-  '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.',
-  'Admin'
+  'CourtWise',
+  '$2a$10$UacPsxFuuBvf41G8zXEdueZdTC/vA2vGLlpD6SXIC0lCXCrbyp/am',
+  'CourtWise'
 ) ON CONFLICT (email) DO NOTHING;
--- The hash above is bcrypt of "Admin1234!" — replace it with your own.
+-- The hash above is bcrypt of "1234"
 -- To generate a new hash: node -e "const b=require('bcryptjs');b.hash('YourPassword',10).then(console.log)"
