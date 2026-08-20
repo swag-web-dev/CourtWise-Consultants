@@ -1,6 +1,14 @@
 import React from 'react'
+import { useContent } from '../context/ContentContext'
+import EditableText from './EditableText'
 
 export default function TopBar() {
+  const { get } = useContent()
+
+  const phone1Num = get('home.contact.phone1_num', '07474 941569')
+  const phone2Num = get('home.contact.phone2_num', '07432 346731')
+  const email     = get('home.contact.email', 'courtwise2026@outlook.com')
+
   return (
     <div className="topbar-bar" style={{
       background: '#042a1e',
@@ -16,19 +24,44 @@ export default function TopBar() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <TopItem icon={<PhoneIcon />} href="tel:07474941569" label="Samantha: 07474 941569" />
+
+          <a href={`tel:${phone1Num.replace(/\s/g, '')}`} style={linkSt}
+            onMouseEnter={e => (e.currentTarget.style.color = '#C78A35')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
+          >
+            <PhoneIcon />
+            <EditableText contentKey="home.topbar.phone1" fallback="Samantha: 07474 941569" />
+          </a>
+
           <Dot />
-          <TopItem icon={<PhoneIcon />} href="tel:07432346731" label="John: 07432 346731" />
+
+          <a href={`tel:${phone2Num.replace(/\s/g, '')}`} style={linkSt}
+            onMouseEnter={e => (e.currentTarget.style.color = '#C78A35')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
+          >
+            <PhoneIcon />
+            <EditableText contentKey="home.topbar.phone2" fallback="John: 07432 346731" />
+          </a>
+
           <Dot className="hide-sm" />
-          <TopItem icon={<EmailIcon />} href="mailto:courtwise2026@outlook.com" label="courtwise2026@outlook.com" className="hide-sm" />
+
+          <a href={`mailto:${email}`} className="hide-sm" style={linkSt}
+            onMouseEnter={e => (e.currentTarget.style.color = '#C78A35')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
+          >
+            <EmailIcon />
+            <EditableText contentKey="home.contact.email" fallback="courtwise2026@outlook.com" />
+          </a>
         </div>
+
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }} className="hide-md">
           <LocationIcon />
           <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.01em' }}>
-            England & Wales — Remote & In-Person Court Attendance
+            <EditableText contentKey="home.topbar.location" fallback="England & Wales — Remote & In-Person Court Attendance" />
           </span>
         </div>
       </div>
+
       <style>{`
         @media (max-width: 900px) { .hide-md { display: none !important; } }
         @media (max-width: 600px) { .hide-sm { display: none !important; } }
@@ -37,23 +70,14 @@ export default function TopBar() {
   )
 }
 
-function Dot({ className = '' }: { className?: string }) {
-  return <span className={className} style={{ width: 1, height: 12, background: 'rgba(255,255,255,0.15)', flexShrink: 0 }} />
+const linkSt: React.CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: '0.35rem',
+  fontSize: '0.7rem', color: 'rgba(255,255,255,0.65)',
+  transition: 'color 0.2s', textDecoration: 'none',
 }
 
-function TopItem({ icon, href, label, className = '' }: { icon: React.ReactNode; href: string; label: string; className?: string }) {
-  return (
-    <a href={href} className={className} style={{
-      display: 'flex', alignItems: 'center', gap: '0.35rem',
-      fontSize: '0.7rem', color: 'rgba(255,255,255,0.65)',
-      transition: 'color 0.2s',
-    }}
-      onMouseEnter={e => (e.currentTarget.style.color = '#C78A35')}
-      onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
-    >
-      {icon}{label}
-    </a>
-  )
+function Dot({ className = '' }: { className?: string }) {
+  return <span className={className} style={{ width: 1, height: 12, background: 'rgba(255,255,255,0.15)', flexShrink: 0 }} />
 }
 
 function PhoneIcon() {

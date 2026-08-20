@@ -3,8 +3,8 @@ import logoImg from '../assets/logo.jpg'
 
 const QUICK_LINKS = [
   { label: 'Home',           href: '#home' },
-  { label: 'About Us',       href: '#about' },
   { label: 'Services',       href: '#services' },
+  { label: 'About Us',       href: '#about' },
   { label: 'Fees',           href: '#fees' },
   { label: 'Why Choose Us',  href: '#why-us' },
   { label: 'Contact',        href: '#contact' },

@@ -1,0 +1,147 @@
+export interface Service {
+  slug: string
+  title: string
+  shortDesc: string
+  accent: string
+  intro: string
+  includes: string[]
+  whoFor: string
+}
+
+export const SERVICES: Service[] = [
+  {
+    slug: 'family-court-consultancy',
+    title: 'Family Court Consultancy & McKenzie Friend Support',
+    shortDesc: 'Practical support and guidance throughout family court proceedings, including case strategy, preparation, statement drafting, court attendance and hearing preparation.',
+    accent: 'var(--rust)',
+    intro: 'Navigating the family court system without legal representation can feel overwhelming. Our Family Court Consultancy service provides hands-on, practical support at every stage of your proceedings — from the first hearing right through to final order. As experienced McKenzie Friends, we can attend court alongside you, help you understand what is happening, and ensure your voice is heard.',
+    includes: [
+      'Case strategy and planning tailored to your circumstances',
+      'Statement drafting and reviewing (position statements, witness statements)',
+      'Court attendance as a McKenzie Friend',
+      'Hearing preparation and coaching',
+      'Help understanding court orders, directions and legal terminology',
+      'Support with correspondence to the court and other parties',
+      'Guidance on evidence gathering and bundle preparation',
+    ],
+    whoFor: 'Families and individuals representing themselves (litigants in person) in private or public family law proceedings.',
+  },
+  {
+    slug: 'child-welfare-consultancy',
+    title: 'Child Welfare Consultancy',
+    shortDesc: 'Independent, child-focused advice on child welfare issues for families, professionals and organisations.',
+    accent: 'var(--green)',
+    intro: 'The welfare of children is at the heart of every decision we make. Our Child Welfare Consultancy service provides independent, expert advice on child welfare matters — whether you are a parent concerned about your child\'s wellbeing, a professional seeking guidance, or an organisation looking to strengthen its safeguarding approach. We bring decades of combined experience in child-focused practice.',
+    includes: [
+      'Independent welfare assessments and reports',
+      'Advice on children\'s rights and best interests',
+      'Guidance on concerns about a child\'s safety or welfare',
+      'Support for families involved with children\'s services',
+      'Consultation for professionals on complex welfare cases',
+      'Help understanding and responding to assessments by social workers or CAFCASS',
+    ],
+    whoFor: 'Parents, carers, extended family members, professionals and organisations with concerns about child welfare.',
+  },
+  {
+    slug: 'court-documents-preparation',
+    title: 'Court Documents & Hearing Preparation',
+    shortDesc: 'Position Statements, Witness Statements, Chronologies, Scott Schedules, Bundles and legal argument support.',
+    accent: 'var(--gold)',
+    intro: 'The quality of your court documents can make a significant difference to the outcome of your case. Our document preparation service ensures your written evidence is clearly structured, factually accurate and presented in the format the court expects. We work closely with you to capture your full story and present it effectively.',
+    includes: [
+      'Position statements (interim and final hearings)',
+      'Witness statements and personal statements',
+      'Chronologies of events',
+      'Scott Schedules (schedule of allegations)',
+      'Court bundle preparation and indexing',
+      'Legal argument and case summary support',
+      'Reviewing and advising on documents received from other parties',
+    ],
+    whoFor: 'Self-representing parties who need professional help preparing written documents for any stage of family court proceedings.',
+  },
+  {
+    slug: 'cafcass-preparation',
+    title: 'CAFCASS & Family Court Preparation',
+    shortDesc: 'Safeguarding interviews, Section 7 reports preparation, final hearing preparation, case analysis and strategy.',
+    accent: 'var(--rust)',
+    intro: 'CAFCASS (Children and Family Court Advisory and Support Service) plays a critical role in family proceedings. Their safeguarding checks, Section 7 reports and recommendations carry significant weight with the court. We help you understand what CAFCASS does, prepare you for their interviews, and ensure your perspective is clearly communicated — giving you the best possible chance of a positive outcome.',
+    includes: [
+      'Preparation for CAFCASS safeguarding telephone interviews',
+      'Advice on Section 7 and Section 37 report processes',
+      'Help articulating your position clearly to CAFCASS officers',
+      'Understanding and responding to CAFCASS recommendations',
+      'Final hearing preparation and strategy',
+      'Case analysis and advice on next steps',
+      'Support where CAFCASS recommendations are disputed',
+    ],
+    whoFor: 'Parents and carers who are subject to CAFCASS involvement in private or public family law proceedings.',
+  },
+  {
+    slug: 'child-consultation-contact',
+    title: 'Child Consultation & Contact Services',
+    shortDesc: 'Wishes & Feelings Consultations, Supported Contact, Supervised Contact, Contact Observation Reports and Contact Summary Reports.',
+    accent: 'var(--green)',
+    intro: 'Ensuring that children\'s voices are heard — and that contact arrangements serve their best interests — is central to our work. We offer a range of child consultation and contact services designed to support children, parents, and families through some of the most sensitive moments in family proceedings.',
+    includes: [
+      'Wishes and Feelings Consultations with children',
+      'Supported Contact sessions in a safe, neutral environment',
+      'Supervised Contact where welfare monitoring is required',
+      'Contact Observation Reports for court purposes',
+      'Contact Summary Reports documenting sessions',
+      'Handover support and management',
+      'Advice on child-inclusive approaches to court proceedings',
+    ],
+    whoFor: 'Families where there are disputes or concerns around child contact arrangements, and where a neutral, professional presence is required.',
+  },
+  {
+    slug: 'supported-supervised-contact',
+    title: 'Supported & Supervised Contact',
+    shortDesc: 'Safe, professionally managed contact sessions with Contact Observation Reports and Contact Summary Reports.',
+    accent: 'var(--gold)',
+    intro: 'When direct contact between a child and a parent or family member requires professional oversight, our Supported and Supervised Contact service provides a safe, structured and child-centred environment for those sessions to take place. We are trained, experienced and completely impartial — our sole focus is the wellbeing of the child.',
+    includes: [
+      'Supported contact in a neutral, comfortable setting',
+      'Fully supervised contact where court-ordered or agreed',
+      'Detailed Contact Observation Reports for court submission',
+      'Contact Summary Reports after every session',
+      'Risk assessment and safety planning',
+      'Handover management between parents',
+      'Graduated reintroduction of contact programmes',
+    ],
+    whoFor: 'Families where a court order, agreement or welfare concern requires contact to be professionally supported or supervised.',
+  },
+  {
+    slug: 'professional-consultancy-training',
+    title: 'Professional Consultancy & Training',
+    shortDesc: 'Reflective supervision, safeguarding consultancy, training, professional development and policy advice for professionals and organisations.',
+    accent: 'var(--rust)',
+    intro: 'We offer specialist consultancy and training for professionals working within or alongside the family justice system. Drawing on extensive frontline experience, we provide reflective supervision, bespoke training programmes and strategic policy advice to help organisations raise standards and improve outcomes for the children and families they serve.',
+    includes: [
+      'Reflective supervision for practitioners',
+      'Safeguarding consultancy for organisations',
+      'Bespoke training programmes (in-person and online)',
+      'Professional development workshops',
+      'Policy review and development advice',
+      'Case consultation for complex or high-risk cases',
+      'Expert input for multi-agency teams and reviews',
+    ],
+    whoFor: 'Social workers, legal professionals, charities, schools and other organisations working with children and families.',
+  },
+  {
+    slug: 'professional-referral-network',
+    title: 'Professional Referral Network',
+    shortDesc: 'A trusted network of professionals to support the best outcomes for children and families.',
+    accent: 'var(--green)',
+    intro: 'Sometimes the most important thing we can do is connect you with exactly the right person. Our Professional Referral Network brings together a carefully selected group of trusted specialists — including solicitors, barristers, therapists, mediators and expert witnesses — who share our commitment to child-focused, compassionate practice. We ensure you are referred to someone who is the right fit for your specific situation.',
+    includes: [
+      'Referrals to specialist family law solicitors and barristers',
+      'Connections to accredited mediators and family therapists',
+      'Expert witness referrals (psychological, medical, social work)',
+      'Links to legal aid providers and pro bono services',
+      'Referrals to domestic abuse support services',
+      'Access to child psychologists and play therapists',
+      'Ongoing liaison between professionals where needed',
+    ],
+    whoFor: 'Anyone who needs specialist professional support beyond our direct services, or who requires a trusted referral into the wider family justice network.',
+  },
+]

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import logoImg from '../assets/logo.jpg'
+import EditableText from './EditableText'
 
 const NAV_LINKS = [
-  { label: 'Home',     href: '#home' },
-  { label: 'About Us', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Fees',     href: '#fees' },
-  { label: 'Why Us',   href: '#why-us' },
-  { label: 'Contact',  href: '#contact' },
+  { label: 'Home',     href: '/#home',     hash: '#home'     },
+  { label: 'Services', href: '/#services', hash: '#services' },
+  { label: 'About Us', href: '/#about',    hash: '#about'    },
+  { label: 'Fees',     href: '/#fees',     hash: '#fees'     },
+  { label: 'Why Us',   href: '/#why-us',   hash: '#why-us'   },
+  { label: 'Contact',  href: '/#contact',  hash: '#contact'  },
 ]
 
 export default function Navbar() {
@@ -18,6 +19,26 @@ export default function Navbar() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
     window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    if (window.location.pathname !== '/') return
+    const ids = NAV_LINKS.map(l => l.hash.slice(1))
+    const onScroll = () => {
+      const offset = 140
+      let current = ids[0]
+      for (let i = 0; i < ids.length; i++) {
+        const el = document.getElementById(ids[i])
+        if (!el) continue
+        const top = el.getBoundingClientRect().top
+        const threshold = i === ids.length - 1 ? window.innerHeight * 0.8 : offset
+        if (top <= threshold) current = ids[i]
+      }
+      setActive(`#${current}`)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -81,12 +102,12 @@ export default function Navbar() {
           {/* ── Desktop nav ── */}
           <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '0.15rem' }}>
             {NAV_LINKS.map(link => {
-              const isActive = active === link.href
+              const isActive = active === link.hash
               return (
                 <a
                   key={link.href}
                   href={link.href}
-                  onClick={() => setActive(link.href)}
+                  onClick={close}
                   style={{
                     padding: '0.5rem 1.1rem',
                     fontSize: '0.8rem',
@@ -139,7 +160,7 @@ export default function Navbar() {
               }}
             >
               <PhoneIcon />
-              Book Free Consultation
+              <EditableText contentKey="home.nav.cta" fallback="Book Free Consultation" />
             </a>
 
             {/* Hamburger */}
@@ -194,7 +215,7 @@ export default function Navbar() {
             letterSpacing: '-0.01em',
           }}>{link.label}</a>
         ))}
-        <a href="#contact" onClick={close} style={{
+        <a href="/#contact" onClick={close} style={{
           marginTop: '2rem',
           display: 'block', textAlign: 'center',
           padding: '1rem 2rem',

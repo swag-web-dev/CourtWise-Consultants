@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useContent } from '../context/ContentContext'
+import EditableText from './EditableText'
 
-const SERVICES = [
+const SERVICE_LIST = [
   'Family Court Consultancy & McKenzie Friend Support',
   'Child Welfare Consultancy',
   'Court Documents & Hearing Preparation',
@@ -16,9 +18,20 @@ type FormState = { name: string; email: string; phone: string; service: string; 
 type Errors = Partial<Record<keyof FormState, string>>
 
 export default function Contact() {
+  const { get } = useContent()
   const [form, setForm] = useState<FormState>({ name: '', email: '', phone: '', service: '', message: '' })
   const [errors, setErrors] = useState<Errors>({})
   const [sent, setSent] = useState(false)
+
+  const phone1 = get('home.contact.phone1_num', '07474 941569')
+  const phone2 = get('home.contact.phone2_num', '07432 346731')
+  const email  = get('home.contact.email', 'courtwise2026@outlook.com')
+
+  const contactItems = [
+    { icon: <PhoneIcon />, labelKey: 'home.contact.phone1_name', labelFb: 'Samantha Petrides', valueKey: 'home.contact.phone1_num', valueFb: '07474 941569', href: `tel:${phone1.replace(/\s/g, '')}` },
+    { icon: <PhoneIcon />, labelKey: 'home.contact.phone2_name', labelFb: 'John Marlow',       valueKey: 'home.contact.phone2_num', valueFb: '07432 346731', href: `tel:${phone2.replace(/\s/g, '')}` },
+    { icon: <MailIcon />,  labelKey: null,                        labelFb: 'Email',             valueKey: 'home.contact.email',      valueFb: 'courtwise2026@outlook.com', href: `mailto:${email}` },
+  ]
 
   const validate = (): boolean => {
     const e: Errors = {}
@@ -30,9 +43,19 @@ export default function Contact() {
     return Object.keys(e).length === 0
   }
 
-  const handleSubmit = (ev: React.FormEvent) => {
+  const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault()
-    if (validate()) setSent(true)
+    if (!validate()) return
+    try {
+      const res = await fetch('/api/submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (res.ok) setSent(true)
+    } catch {
+      setSent(true) // still show thanks even if offline
+    }
   }
 
   const inputStyle: React.CSSProperties = {
@@ -53,22 +76,16 @@ export default function Contact() {
 
         {/* ── Left info ── */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span className="eyebrow">Get in Touch</span>
-          <h2 className="section-title">We're Here to Help</h2>
+          <span className="eyebrow"><EditableText contentKey="home.contact.tag" fallback="Get in Touch" /></span>
+          <h2 className="section-title"><EditableText contentKey="home.contact.title" fallback="We're Here to Help" /></h2>
           <div className="divider" />
           <p className="lead" style={{ marginBottom: '2.25rem' }}>
-            Whether you're just starting out or already in proceedings, we're here to guide you.
-            Contact us today for a free, no-obligation 30-minute telephone enquiry.
+            <EditableText contentKey="home.contact.subtitle" fallback="Whether you're just starting out or already in proceedings, we're here to guide you. Contact us today for a free, no-obligation 30-minute telephone enquiry." multiline={true} />
           </p>
 
-          {/* Contact cards */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '1.5rem' }}>
-            {[
-              { icon: <PhoneIcon />, label: 'Samantha Petrides', value: '07474 941569', href: 'tel:07474941569' },
-              { icon: <PhoneIcon />, label: 'John Marlow',       value: '07432 346731', href: 'tel:07432346731' },
-              { icon: <MailIcon />,  label: 'Email',              value: 'courtwise2026@outlook.com', href: 'mailto:courtwise2026@outlook.com' },
-            ].map(item => (
-              <a key={item.label} href={item.href} style={{
+            {contactItems.map(item => (
+              <a key={item.valueKey} href={item.href} style={{
                 display: 'flex', gap: '1rem', alignItems: 'center',
                 padding: '1rem 1.25rem',
                 background: 'var(--cream)', border: '1px solid var(--border)',
@@ -87,21 +104,26 @@ export default function Contact() {
               >
                 <span style={{ color: 'var(--rust)', flexShrink: 0, display: 'flex' }}>{item.icon}</span>
                 <div>
-                  <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--olive)', marginBottom: '0.15rem' }}>{item.label}</div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--rust)' }}>{item.value}</div>
+                  <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--olive)', marginBottom: '0.15rem' }}>
+                    {item.labelKey
+                      ? <EditableText contentKey={item.labelKey} fallback={item.labelFb} />
+                      : item.labelFb}
+                  </div>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--rust)' }}>
+                    <EditableText contentKey={item.valueKey} fallback={item.valueFb} />
+                  </div>
                 </div>
               </a>
             ))}
           </div>
 
-          {/* Pull quote — pinned to bottom */}
           <div style={{
             marginTop: 'auto',
             padding: '1.5rem', borderLeft: '4px solid var(--gold)',
             background: 'var(--cream)', borderRadius: '0 var(--radius) var(--radius) 0',
           }}>
             <p style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', color: 'var(--green)', fontSize: '1.05rem', lineHeight: 1.6 }}>
-              "Supporting families through every step of the family justice journey."
+              <EditableText contentKey="home.contact.quote" fallback='"Supporting families through every step of the family justice journey."' />
             </p>
           </div>
         </div>
@@ -122,8 +144,8 @@ export default function Contact() {
                 Your enquiry has been received. We'll be in touch very soon.
                 If your matter is urgent, please call us directly.
               </p>
-              <a href="tel:07474941569" className="btn btn-gold" style={{ marginTop: '2rem', display: 'inline-block' }}>
-                Call Now: 07474 941569
+              <a href={`tel:${phone1.replace(/\s/g, '')}`} className="btn btn-gold" style={{ marginTop: '2rem', display: 'inline-block' }}>
+                Call Now: {phone1}
               </a>
             </div>
           ) : (
@@ -170,7 +192,7 @@ export default function Contact() {
                   onBlur={ev  => (ev.target.style.borderColor = 'var(--border)')}
                 >
                   <option value="">Select a service...</option>
-                  {SERVICES.map(s => <option key={s}>{s}</option>)}
+                  {SERVICE_LIST.map(s => <option key={s}>{s}</option>)}
                 </select>
               </Field>
 

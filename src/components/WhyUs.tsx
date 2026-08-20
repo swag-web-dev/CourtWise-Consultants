@@ -1,22 +1,23 @@
-const REASONS = [
-  { icon: <AwardIcon />,    text: 'Over 40 years\' combined Family Justice experience' },
-  { icon: <ScaleIcon />,   text: 'Former CAFCASS Family Court Advisers, Children\'s Guardians and Social Workers' },
-  { icon: <HeartIcon />,   text: 'Independent, child-focused and compassionate at every stage' },
-  { icon: <ShieldIcon />,  text: 'Clear fixed fees and transparent pricing — no hidden costs' },
-  { icon: <MapPinIcon />,  text: 'Services throughout England & Wales — remote and in-person court attendance' },
+import EditableText from './EditableText'
+
+const REASONS_DEFAULT = [
+  "Over 40 years' combined Family Justice experience",
+  "Former CAFCASS Family Court Advisers, Children's Guardians and Social Workers",
+  "Independent, child-focused and compassionate at every stage",
+  "Clear fixed fees and transparent pricing — no hidden costs",
+  "Services throughout England & Wales — remote and in-person court attendance",
 ]
 
-const PILLARS = [
-  { label: 'Professional',   desc: 'Expert knowledge built over decades of frontline family justice work.' },
-  { label: 'Compassionate',  desc: 'We listen, we understand, and we stand beside you every step.' },
-  { label: 'Trusted',        desc: 'Recommended by professionals and families across England & Wales.' },
+const PILLARS_DEFAULT = [
+  { label: 'Professional',  desc: 'Expert knowledge built over decades of frontline family justice work.' },
+  { label: 'Compassionate', desc: 'We listen, we understand, and we stand beside you every step.' },
+  { label: 'Trusted',       desc: 'Recommended by professionals and families across England & Wales.' },
 ]
 
 export default function WhyUs() {
   return (
     <section id="why-us" className="section" style={{ background: 'var(--green)', position: 'relative', overflow: 'hidden' }}>
 
-      {/* Subtle ambient glow */}
       <div aria-hidden style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'radial-gradient(ellipse 70% 60% at 80% 50%, rgba(197,155,39,0.04) 0%, transparent 100%)',
@@ -26,11 +27,11 @@ export default function WhyUs() {
 
         {/* Section header */}
         <div style={{ textAlign: 'center', maxWidth: 580, margin: '0 auto 3.5rem' }}>
-          <span className="eyebrow">Our Difference</span>
-          <h2 className="section-title section-title-white">Why Choose CourtWise?</h2>
+          <span className="eyebrow"><EditableText contentKey="home.whyus.tag" fallback="Our Difference" /></span>
+          <h2 className="section-title section-title-white"><EditableText contentKey="home.whyus.title" fallback="Why Choose CourtWise?" /></h2>
           <div className="divider divider-gold divider-center" />
           <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '1rem', lineHeight: 1.85 }}>
-            When your family's future is at stake, experience, integrity and compassion are everything.
+            <EditableText contentKey="home.whyus.subtitle" fallback="When your family's future is at stake, experience, integrity and compassion are everything." multiline={true} />
           </p>
         </div>
 
@@ -43,7 +44,7 @@ export default function WhyUs() {
 
           {/* ── Left: reason list ── */}
           <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-            {REASONS.map((r, i) => (
+            {REASONS_DEFAULT.map((text, i) => (
               <li key={i} style={{
                 display: 'flex', alignItems: 'center', gap: '1.25rem',
                 padding: '1.1rem 1.4rem',
@@ -68,10 +69,10 @@ export default function WhyUs() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: '#C59B27',
                 }}>
-                  {r.icon}
+                  {ICONS[i]}
                 </div>
                 <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.93rem', lineHeight: 1.65 }}>
-                  {r.text}
+                  <EditableText contentKey={`home.whyus.reason${i}`} fallback={text} multiline={true} />
                 </span>
               </li>
             ))}
@@ -98,7 +99,7 @@ export default function WhyUs() {
                 color: 'var(--white)', lineHeight: 1.55,
                 marginBottom: '1.25rem',
               }}>
-                Putting children at the heart of every decision.
+                <EditableText contentKey="home.whyus.quote" fallback="Putting children at the heart of every decision." />
               </p>
               <div style={{
                 fontSize: '0.68rem', letterSpacing: '0.18em',
@@ -108,8 +109,8 @@ export default function WhyUs() {
 
             {/* Pillars */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              {PILLARS.map(p => (
-                <div key={p.label} style={{ display: 'flex', gap: '1.1rem', alignItems: 'flex-start' }}>
+              {PILLARS_DEFAULT.map((p, i) => (
+                <div key={i} style={{ display: 'flex', gap: '1.1rem', alignItems: 'flex-start' }}>
                   <div style={{
                     width: 3, alignSelf: 'stretch', flexShrink: 0,
                     background: 'var(--rust)', borderRadius: 2, minHeight: 40,
@@ -118,9 +119,11 @@ export default function WhyUs() {
                     <div style={{
                       fontFamily: 'var(--serif)', fontWeight: 700,
                       color: 'var(--white)', fontSize: '1rem', marginBottom: '0.25rem',
-                    }}>{p.label}</div>
+                    }}>
+                      <EditableText contentKey={`home.whyus.pillar${i}_label`} fallback={p.label} />
+                    </div>
                     <div style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.65 }}>
-                      {p.desc}
+                      <EditableText contentKey={`home.whyus.pillar${i}_desc`} fallback={p.desc} multiline={true} />
                     </div>
                   </div>
                 </div>
@@ -150,7 +153,7 @@ export default function WhyUs() {
                 e.currentTarget.style.transform = 'none'
               }}
             >
-              Book Your Free Enquiry
+              <EditableText contentKey="home.whyus.cta" fallback="Book Your Free Enquiry" />
             </a>
           </div>
         </div>
@@ -168,7 +171,14 @@ export default function WhyUs() {
   )
 }
 
-/* ── SVG Icons ── */
+const ICONS = [
+  <AwardIcon />,
+  <ScaleIcon />,
+  <HeartIcon />,
+  <ShieldIcon />,
+  <MapPinIcon />,
+]
+
 function AwardIcon() {
   return <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
 }

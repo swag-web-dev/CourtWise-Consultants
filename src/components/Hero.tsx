@@ -1,7 +1,8 @@
 import React from 'react'
 import teamImg from '../assets/team-main2.jpg'
+import EditableText from './EditableText'
 
-const STATS = [
+const STATS_DEFAULT = [
   { icon: <TrophyIcon />, val: '40+',  label: 'Years Combined', sub: 'Experience' },
   { icon: <StarIcon />,   val: '100%', label: 'Child-Focused',  sub: 'Approach' },
   { icon: <MapIcon />,    val: 'E & W', label: 'England',       sub: '& Wales' },
@@ -46,7 +47,7 @@ export default function Hero() {
               fontFamily: 'var(--sans)', fontSize: '0.67rem', fontWeight: 700,
               letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C59B27',
             }}>
-              Family Justice · Child-Focused · Safeguarding
+              <EditableText contentKey="home.hero.badge" fallback="Family Justice · Child-Focused · Safeguarding" />
             </span>
           </div>
 
@@ -60,10 +61,10 @@ export default function Hero() {
             letterSpacing: '-0.01em',
             marginBottom: '1rem',
           }}>
-            Guidance.<br />
-            Support.<br />
+            <EditableText contentKey="home.hero.headline1" fallback="Guidance." /><br />
+            <EditableText contentKey="home.hero.headline2" fallback="Support." /><br />
             <em style={{ color: '#C59B27', fontStyle: 'italic', fontWeight: 600 }}>
-              Better Outcomes.
+              <EditableText contentKey="home.hero.headline3" fallback="Better Outcomes." />
             </em>
           </h1>
 
@@ -75,7 +76,7 @@ export default function Hero() {
             letterSpacing: '0.01em',
             marginBottom: '2rem',
           }}>
-            Putting children at the heart of every decision.
+            <EditableText contentKey="home.hero.subtitle" fallback="Putting children at the heart of every decision." />
           </p>
 
           {/* Gold divider */}
@@ -89,7 +90,7 @@ export default function Hero() {
             maxWidth: 500,
             marginBottom: '0.75rem',
           }}>
-            We provide expert support for families<br className="tablet-br" /> navigating the family justice system.<br className="tablet-br" /> We don't just support<br className="tablet-br" /> your case — we explain every step of the journey.
+            <EditableText contentKey="home.hero.body1" fallback="We provide expert support for families navigating the family justice system. We don't just support your case — we explain every step of the journey." multiline={true} />
           </p>
           <p style={{
             fontFamily: 'var(--serif)', fontStyle: 'italic',
@@ -98,13 +99,13 @@ export default function Hero() {
             marginBottom: '2rem',
             fontWeight: 500,
           }}>
-            Because the right support makes all the difference.
+            <EditableText contentKey="home.hero.body2" fallback="Because the right support makes all the difference." />
           </p>
 
           {/* CTA buttons */}
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-            <HeroBtn href="#contact" primary>Free 30-Min Initial Enquiry</HeroBtn>
-            <HeroBtn href="#services" primary={false}>Explore Services →</HeroBtn>
+            <HeroBtn href="#contact" primary><EditableText contentKey="home.hero.cta_primary" fallback="Free 30-Min Initial Enquiry" /></HeroBtn>
+            <HeroBtn href="#services" primary={false}><EditableText contentKey="home.hero.cta_secondary" fallback="Explore Services →" /></HeroBtn>
           </div>
 
           {/* Stats row */}
@@ -113,13 +114,13 @@ export default function Hero() {
             paddingTop: '1.75rem',
             borderTop: '1px solid rgba(255,255,255,0.1)',
           }}>
-            {STATS.map((s, i) => (
-              <div key={s.val} className="hero-stat-item" style={{
+            {STATS_DEFAULT.map((s, i) => (
+              <div key={i} className="hero-stat-item" style={{
                 display: 'flex', alignItems: 'flex-start', gap: '0.85rem',
                 flex: 1,
-                paddingRight: i < STATS.length - 1 ? '2rem' : 0,
-                borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
-                marginRight: i < STATS.length - 1 ? '2rem' : 0,
+                paddingRight: i < STATS_DEFAULT.length - 1 ? '2rem' : 0,
+                borderRight: i < STATS_DEFAULT.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
+                marginRight: i < STATS_DEFAULT.length - 1 ? '2rem' : 0,
               }}>
                 <div style={{
                   width: 36, height: 36, borderRadius: '50%',
@@ -134,12 +135,18 @@ export default function Hero() {
                   <div style={{
                     fontFamily: 'var(--serif)', fontWeight: 700,
                     fontSize: '1.85rem', color: '#C59B27', lineHeight: 1,
-                  }}>{s.val}</div>
+                  }}>
+                    <EditableText contentKey={`home.hero.stat${i + 1}_val`} fallback={s.val} />
+                  </div>
                   <div style={{
                     fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)',
                     letterSpacing: '0.09em', textTransform: 'uppercase',
                     lineHeight: 1.5, marginTop: '0.3rem',
-                  }}>{s.label}<br />{s.sub}</div>
+                  }}>
+                    <EditableText contentKey={`home.hero.stat${i + 1}_label`} fallback={s.label} />
+                    <br />
+                    <EditableText contentKey={`home.hero.stat${i + 1}_sub`} fallback={s.sub} />
+                  </div>
                 </div>
               </div>
             ))}

@@ -1,76 +1,35 @@
-const SERVICES = [
-  {
-    icon: <ScalesIcon />,
-    title: 'Family Court Consultancy & McKenzie Friend Support',
-    desc: 'Practical support and guidance throughout family court proceedings, including case strategy, preparation, statement drafting, court attendance and hearing preparation.',
-    accent: 'var(--rust)',
-  },
-  {
-    icon: <ShieldIcon />,
-    title: 'Child Welfare Consultancy',
-    desc: 'Independent, child-focused advice on child welfare issues for families, professionals and organisations.',
-    accent: 'var(--green)',
-  },
-  {
-    icon: <DocumentIcon />,
-    title: 'Court Documents & Hearing Preparation',
-    desc: 'Position Statements, Witness Statements, Chronologies, Scott Schedules, Bundles and legal argument support.',
-    accent: 'var(--gold)',
-  },
-  {
-    icon: <BuildingIcon />,
-    title: 'CAFCASS & Family Court Preparation',
-    desc: 'Safeguarding interviews, Section 7 reports preparation, final hearing preparation, case analysis and strategy.',
-    accent: 'var(--rust)',
-  },
-  {
-    icon: <HeartHandsIcon />,
-    title: 'Child Consultation & Contact Services',
-    desc: 'Wishes & Feelings Consultations, Supported Contact, Supervised Contact, Contact Observation Reports and Contact Summary Reports.',
-    accent: 'var(--green)',
-  },
-  {
-    icon: <UsersIcon />,
-    title: 'Supported & Supervised Contact',
-    desc: 'Safe, professionally managed contact sessions with Contact Observation Reports and Contact Summary Reports.',
-    accent: 'var(--gold)',
-  },
-  {
-    icon: <GraduationIcon />,
-    title: 'Professional Consultancy & Training',
-    desc: 'Reflective supervision, safeguarding consultancy, training, professional development and policy advice for professionals and organisations.',
-    accent: 'var(--rust)',
-  },
-  {
-    icon: <NetworkIcon />,
-    title: 'Professional Referral Network',
-    desc: 'A trusted network of professionals to support the best outcomes for children and families.',
-    accent: 'var(--green)',
-  },
-]
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { SERVICES } from '../data/services'
+import EditableText from './EditableText'
 
 export default function Services() {
   return (
     <section id="services" className="section" style={{ background: 'var(--white)' }}>
       <div className="container">
-        {/* Header */}
         <div style={{ textAlign: 'center', maxWidth: 600, margin: '0 auto 3.5rem' }}>
-          <span className="eyebrow">What We Offer</span>
-          <h2 className="section-title">Our Services</h2>
+          <span className="eyebrow"><EditableText contentKey="home.services.tag" fallback="What We Offer" /></span>
+          <h2 className="section-title"><EditableText contentKey="home.services.title" fallback="Our Services" /></h2>
           <div className="divider divider-center" />
           <p className="lead">
-            Comprehensive, expert support across every aspect of the family justice system — from the first call to the final hearing.
+            <EditableText contentKey="home.services.subtitle" fallback="Comprehensive, expert support across every aspect of the family justice system — from the first call to the final hearing." multiline={true} />
           </p>
         </div>
 
-        {/* fluid auto-fit grid: 4-col desktop → 2-col tablet → 1-col mobile */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
           gap: '1.25rem',
         }}>
           {SERVICES.map((s, i) => (
-            <ServiceCard key={i} {...s} />
+            <ServiceCard
+              key={i}
+              icon={ICONS[i]}
+              accent={s.accent}
+              slug={s.slug}
+              fallbackTitle={s.title}
+              fallbackDesc={s.shortDesc}
+            />
           ))}
         </div>
       </div>
@@ -78,9 +37,16 @@ export default function Services() {
   )
 }
 
-function ServiceCard({ icon, title, desc, accent }: { icon: React.ReactNode; title: string; desc: string; accent: string }) {
+function ServiceCard({ icon, accent, slug, fallbackTitle, fallbackDesc }: {
+  icon: React.ReactNode
+  accent: string
+  slug: string
+  fallbackTitle: string
+  fallbackDesc: string
+}) {
   return (
-    <div
+    <Link
+      to={`/services/${slug}`}
       style={{
         background: 'var(--white)',
         border: '1px solid var(--border)',
@@ -89,14 +55,15 @@ function ServiceCard({ icon, title, desc, accent }: { icon: React.ReactNode; tit
         borderRadius: 'var(--radius)',
         transition: 'transform var(--transition), box-shadow var(--transition)',
         display: 'flex', flexDirection: 'column', gap: '0.85rem',
+        textDecoration: 'none', cursor: 'pointer',
       }}
       onMouseEnter={e => {
-        const el = e.currentTarget as HTMLDivElement
+        const el = e.currentTarget as HTMLAnchorElement
         el.style.transform = 'translateY(-5px)'
         el.style.boxShadow = 'var(--shadow-md)'
       }}
       onMouseLeave={e => {
-        const el = e.currentTarget as HTMLDivElement
+        const el = e.currentTarget as HTMLAnchorElement
         el.style.transform = 'none'
         el.style.boxShadow = 'none'
       }}
@@ -113,13 +80,29 @@ function ServiceCard({ icon, title, desc, accent }: { icon: React.ReactNode; tit
       <h3 style={{
         fontFamily: 'var(--serif)', fontWeight: 700,
         fontSize: '1.05rem', color: 'var(--green)', lineHeight: 1.35,
-      }}>{title}</h3>
-      <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.75, flex: 1 }}>{desc}</p>
-    </div>
+      }}>
+        <EditableText contentKey={`service.${slug}.title`} fallback={fallbackTitle} />
+      </h3>
+      <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.75, flex: 1 }}>
+        <EditableText contentKey={`service.${slug}.shortDesc`} fallback={fallbackDesc} multiline={true} />
+      </p>
+      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: accent, letterSpacing: '0.06em', textTransform: 'uppercase', marginTop: '0.25rem' }}>
+        Learn More →
+      </span>
+    </Link>
   )
 }
 
-import React from 'react'
+const ICONS = [
+  <ScalesIcon />,
+  <ShieldIcon />,
+  <DocumentIcon />,
+  <BuildingIcon />,
+  <HeartHandsIcon />,
+  <UsersIcon />,
+  <GraduationIcon />,
+  <NetworkIcon />,
+]
 
 function ScalesIcon() {
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><line x1="12" y1="3" x2="12" y2="21"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
